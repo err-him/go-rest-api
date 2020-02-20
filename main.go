@@ -15,7 +15,6 @@ func main() {
 	if port == "" {
 		port = PORT
 	}
-
 	app := &config.App{}
 	app.Intialize()
 	app.Run(port)

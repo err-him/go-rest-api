@@ -3,11 +3,14 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"go-rest-api/logger"
 	hc "go-rest-api/src/constant"
 	"go-rest-api/src/handler"
 	"net/http"
 	"strconv"
 )
+
+// type Logger = config.Log
 
 type Data struct {
 	Number string `json:"number"`
@@ -25,10 +28,10 @@ type Time struct {
 
 func GetNumber(w http.ResponseWriter, r *http.Request) {
 	//get the request body param
-
 	number := r.URL.Query().Get("number")
 	if number == "" {
 		handler.HttpError(w, http.StatusBadRequest, hc.BAD_REQUEST)
+		logger.Errorf("Error while processing the request %v", hc.BAD_REQUEST)
 		return
 	}
 	//check if given number is string

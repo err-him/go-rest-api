@@ -1,0 +1,13 @@
+2020-02-20T18:42:08.719+0530	ERROR	controller/number.go:34	Error while processing the request Bad Request
+go-rest-api/logger.Errorf
+	/Users/himanshu/go-learning/go-rest-api/logger/zap.go:70
+go-rest-api/src/controller.GetNumber
+	/Users/himanshu/go-learning/go-rest-api/src/controller/number.go:34
+net/http.HandlerFunc.ServeHTTP
+	/usr/local/Cellar/go/1.13.8/libexec/src/net/http/server.go:2007
+github.com/gorilla/mux.(*Router).ServeHTTP
+	/Users/himanshu/go/pkg/mod/github.com/gorilla/mux@v1.7.4/mux.go:210
+net/http.serverHandler.ServeHTTP
+	/usr/local/Cellar/go/1.13.8/libexec/src/net/http/server.go:2802
+net/http.(*conn).serve
+	/usr/local/Cellar/go/1.13.8/libexec/src/net/http/server.go:1890

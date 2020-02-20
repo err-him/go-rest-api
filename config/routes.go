@@ -7,7 +7,11 @@ import (
 )
 
 func handleAppRoutes(r *mux.Router) {
-	r.HandleFunc("/", controller.GetNumber).Methods("GET")
-	r.HandleFunc("/post", controller.PostNumber).Methods("POST")
+
+	//handling API versioning
+	v1 := r.PathPrefix("/api/v1").Subrouter()
+
+	v1.HandleFunc("/", controller.GetNumber).Methods("GET")
+	v1.HandleFunc("/post", controller.PostNumber).Methods("POST")
 
 }
