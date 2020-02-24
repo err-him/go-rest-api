@@ -1,95 +1,50 @@
 package logger
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
-)
+	"log"
 
-var logger *zap.SugaredLogger
+	"github.com/err-him/gozap"
+)
 
 //Default Intialize
 func init() {
-	InitLogger()
-	defer logger.Sync()
-}
 
-func InitLogger() {
-	writerSyncer := getLogWriter()
-	encoder := getEncoder()
-	core := zapcore.NewCore(encoder, writerSyncer, zapcore.DebugLevel)
-
-	sugarLogger := zap.New(core, zap.AddCallerSkip(1), zap.AddCaller(), zap.AddStacktrace(zapcore.DebugLevel))
-	logger = sugarLogger.Sugar()
-}
-
-func getEncoder() zapcore.Encoder {
-	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-	return zapcore.NewConsoleEncoder(encoderConfig)
-}
-
-func getLogWriter() zapcore.WriteSyncer {
-	lumberJackLogger := &lumberjack.Logger{
-
-		Filename:   "./logs/app.log",
-		MaxSize:    1,  //IN MB
-		MaxBackups: 10, //Last file MaxBackups
-		MaxAge:     0,
-		Compress:   true,
+	config := gozap.Configuration{
+		EnableConsole:     true,             //Whether to print the outpul on the console, Good for debugging purpose in local
+		ConsoleLevel:      gozap.Debug,      //Debug level log
+		ConsoleJSONFormat: false,            //Console log in JSON format, false will print in raw format on console
+		EnableFile:        true,             // Logging in File
+		FileLevel:         gozap.Info,       // File log leve\
+		FileJSONFormat:    false,            // File JSON Format, False will print in file in raw Format
+		FileLocation:      "./logs/app.log", //File location where log needs to be appended
 	}
-	return zapcore.AddSync(lumberJackLogger)
+
+	err := gozap.NewLogger(config)
+	if err != nil {
+		log.Fatalf("Could not instantiate log %s", err.Error())
+	}
 }
 
-func Debugf(template string, args ...interface{}) {
-	logger.Debugf(template, args...)
+func Debugf(format string, args ...interface{}) {
+	gozap.Debugf(format, args...)
 }
 
-func Info(args ...interface{}) {
-	logger.Info(args...)
+func Infof(format string, args ...interface{}) {
+	gozap.Infof(format, args...)
 }
 
-func Infof(template string, args ...interface{}) {
-	logger.Infof(template, args...)
+func Warnf(format string, args ...interface{}) {
+	gozap.Warnf(format, args...)
 }
 
-func Warn(args ...interface{}) {
-	logger.Warn(args...)
+func Errorf(format string, args ...interface{}) {
+	gozap.Errorf(format, args...)
 }
 
-func Warnf(template string, args ...interface{}) {
-	logger.Warnf(template, args...)
+func Fatalf(format string, args ...interface{}) {
+	gozap.Fatalf(format, args...)
 }
 
-func Error(args ...interface{}) {
-	logger.Error(args...)
-}
-
-func Errorf(template string, args ...interface{}) {
-	logger.Errorf(template, args...)
-}
-
-func DPanic(args ...interface{}) {
-	logger.DPanic(args...)
-}
-
-func DPanicf(template string, args ...interface{}) {
-	logger.DPanicf(template, args...)
-}
-
-func Panic(args ...interface{}) {
-	logger.Panic(args...)
-}
-
-func Panicf(template string, args ...interface{}) {
-	logger.Panicf(template, args...)
-}
-
-func Fatal(args ...interface{}) {
-	logger.Fatal(args...)
-}
-
-func Fatalf(template string, args ...interface{}) {
-	logger.Fatalf(template, args...)
+func Panicf(format string, args ...interface{}) {
+	gozap.Panicf(format, args...)
 }
